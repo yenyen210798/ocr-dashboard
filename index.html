@@ -8,7 +8,7 @@
 
 <style>
 
-/* ===== GANTI LINK BACKGROUND DI SINI ===== */
+/* ===== GANTI BACKGROUND DI SINI ===== */
 
 body{
 font-family:Arial;
@@ -84,9 +84,11 @@ image,
 'eng'
 ).then(({ data: { text } }) => {
 
+/* ===== BERSIHKAN TEKS ===== */
+
 let cleaned = text
-.replace(/\n+/g," ")
-.replace(/\s+/g," ")
+.replace(/\n+/g,"")
+.replace(/\s+/g,"")
 .trim()
 
 document.getElementById("result").value = cleaned
@@ -95,7 +97,7 @@ document.getElementById("result").value = cleaned
 
 }
 
-/* upload gambar */
+/* ===== UPLOAD GAMBAR ===== */
 
 document.getElementById('imageInput').addEventListener('change',function(){
 
@@ -105,7 +107,7 @@ runOCR(file)
 
 })
 
-/* paste gambar */
+/* ===== PASTE GAMBAR ===== */
 
 document.addEventListener('paste',function(event){
 
@@ -125,7 +127,7 @@ runOCR(blob)
 
 })
 
-/* copy text */
+/* ===== COPY TEXT ===== */
 
 function copyText(){
 
