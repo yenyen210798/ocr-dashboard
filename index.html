@@ -52,26 +52,56 @@ cursor:pointer;
 
 <br><br>
 
+<p>Tip: bisa paste gambar dengan <b>Ctrl + V</b></p>
+
 <button onclick="copyText()">Copy Text</button>
 
-<textarea id="result" placeholder="Hasil teks akan muncul di sini..."></textarea>
+<textarea id="result" placeholder="Hasil teks muncul di sini..."></textarea>
 
 </div>
 
 <script>
 
-document.getElementById('imageInput').addEventListener('change', function(){
-
-const file = this.files[0]
+function runOCR(image){
 
 Tesseract.recognize(
-file,
+image,
 'eng'
 ).then(({ data: { text } }) => {
 
 document.getElementById("result").value = text
 
 })
+
+}
+
+/* upload file */
+
+document.getElementById('imageInput').addEventListener('change',function(){
+
+const file = this.files[0]
+
+runOCR(file)
+
+})
+
+/* paste image */
+
+document.addEventListener('paste',function(event){
+
+const items = event.clipboardData.items
+
+for (let i = 0; i < items.length; i++) {
+
+if (items[i].type.indexOf("image") !== -1) {
+
+const blob = items[i].getAsFile()
+
+runOCR(blob)
+
+}
+
+}
 
 })
 
