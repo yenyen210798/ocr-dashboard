@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>OCR Dashboard</title>
+<title>KITA KITA SAJA</title>
 
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
 
@@ -28,6 +28,17 @@ background:rgba(0,0,0,0.65);
 padding:35px;
 border-radius:15px;
 backdrop-filter:blur(6px);
+}
+
+h1{
+margin-bottom:10px;
+letter-spacing:2px;
+}
+
+.verse{
+margin-bottom:20px;
+font-size:15px;
+opacity:0.9;
 }
 
 textarea{
@@ -63,11 +74,18 @@ background:#2563eb;
 
 <div class="container">
 
-<h2>DASHBOARD KITA</h2>
+<h1>KITA KITA SAJA</h1>
+
+<div class="verse">
+Saudara-saudara, aku sendiri tidak menganggap bahwa aku telah menangkapnya,
+tetapi ini yang kulakukan: aku melupakan apa yang telah di belakangku
+dan mengarahkan diri kepada apa yang di hadapanku.  
+<b>Filipi 3:13</b>
+</div>
 
 <input type="file" id="imageInput">
 
-<p>Tip: paste screenshot dengan <b>Ctrl + V</b></p>
+<br>
 
 <button onclick="copyText()">Copy Text</button>
 
@@ -84,7 +102,7 @@ image,
 'eng'
 ).then(({ data: { text } }) => {
 
-/* ===== BERSIHKAN TEKS ===== */
+/* hapus enter dan spasi */
 
 let cleaned = text
 .replace(/\n+/g,"")
@@ -97,7 +115,7 @@ document.getElementById("result").value = cleaned
 
 }
 
-/* ===== UPLOAD GAMBAR ===== */
+/* upload gambar */
 
 document.getElementById('imageInput').addEventListener('change',function(){
 
@@ -107,7 +125,7 @@ runOCR(file)
 
 })
 
-/* ===== PASTE GAMBAR ===== */
+/* paste screenshot */
 
 document.addEventListener('paste',function(event){
 
@@ -127,7 +145,7 @@ runOCR(blob)
 
 })
 
-/* ===== COPY TEXT ===== */
+/* copy text */
 
 function copyText(){
 
