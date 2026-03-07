@@ -8,11 +8,10 @@
 
 <style>
 
-/* ===== GANTI BACKGROUND DI SINI ===== */
-
+/* ===== BACKGROUND ===== */
 body{
-font-family:BREE SERIF;
-background-image:url("https://i.pinimg.com/474x/b9/8c/a0/b98ca0aef64a30a7ad3b076027ec5d76.jpg");
+font-family:Arial;
+background-image:url("https://i.pinimg.com/736x/95/e3/3d/95e33d801f1220d9004716602c1eabfe.jpg");
 background-size:cover;
 background-position:center;
 background-attachment:fixed;
@@ -21,40 +20,48 @@ text-align:center;
 padding:40px;
 }
 
+/* ===== PANEL UTAMA GLASS ===== */
 .container{
 max-width:750px;
-margin:100px auto;
-background:rgba(0,0,0,0.65);
+margin:150px auto; /* turun ke bawah */
 padding:35px;
 border-radius:15px;
-backdrop-filter:blur(6px);
+background:rgba(0,0,0,0.4);
+backdrop-filter:blur(10px);
 display:flex;
 flex-direction:column;
 align-items:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.5);
 }
 
+/* ===== JUDUL ===== */
 h1{
 margin-bottom:10px;
 letter-spacing:2px;
 }
 
+/* ===== AYAT ===== */
 .verse{
 margin-bottom:20px;
 font-size:15px;
 opacity:0.9;
 }
 
+/* ===== TEXTAREA (KOTAK PUTIH) ===== */
 textarea{
-width:100%;
-height:200px;
-margin-top:20px;
+width:80%;         /* lebih kecil dari 100% */
+height:150px;       /* lebih compact */
+margin-top:30px;
 font-size:16px;
-padding:12px;
+padding:10px;
 border-radius:8px;
 border:none;
 resize:none;
+color:#111;
+background:rgba(255,255,255,0.9); /* semi-putih tapi jelas */
 }
 
+/* ===== BUTTON ===== */
 button{
 padding:10px 25px;
 margin-top:15px;
@@ -70,7 +77,6 @@ background:#2563eb;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -98,69 +104,44 @@ dan mengarahkan diri kepada apa yang di hadapanku.
 
 <script>
 
+/* ===== OCR FUNCTION ===== */
 function runOCR(image){
-
 Tesseract.recognize(
 image,
 'eng'
 ).then(({ data: { text } }) => {
 
-/* hapus enter dan spasi */
-
-let cleaned = text
-.replace(/\n+/g,"")
-.replace(/\s+/g,"")
-.trim()
+/* hapus enter & spasi, jadi satu baris */
+let cleaned = text.replace(/\n+/g,"").replace(/\s+/g,"").trim()
 
 document.getElementById("result").value = cleaned
-
 })
-
 }
 
-/* upload gambar */
-
+/* ===== UPLOAD GAMBAR ===== */
 document.getElementById('imageInput').addEventListener('change',function(){
-
 const file = this.files[0]
-
 runOCR(file)
-
 })
 
-/* paste screenshot */
-
+/* ===== PASTE SCREENSHOT ===== */
 document.addEventListener('paste',function(event){
-
 const items = event.clipboardData.items
-
 for (let i = 0; i < items.length; i++) {
-
 if (items[i].type.indexOf("image") !== -1) {
-
 const blob = items[i].getAsFile()
-
 runOCR(blob)
-
 }
-
 }
-
 })
 
-/* copy text */
-
+/* ===== COPY TEXT ===== */
 function copyText(){
-
 const textarea = document.getElementById("result")
-
 textarea.select()
-
 document.execCommand("copy")
-
 }
 
 </script>
-
 </body>
 </html>
