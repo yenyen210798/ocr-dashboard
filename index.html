@@ -7,8 +7,6 @@
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
 
 <style>
-
-/* ===== BACKGROUND ===== */
 body{
 font-family:Arial;
 background-image:url("https://i.pinimg.com/736x/95/e3/3d/95e33d801f1220d9004716602c1eabfe.jpg");
@@ -18,15 +16,15 @@ background-attachment:fixed;
 color:white;
 text-align:center;
 padding:40px;
+transition:0.5s;
 }
 
-/* ===== PANEL UTAMA GLASS ===== */
 .container{
 max-width:750px;
-margin:150px auto; /* turun ke bawah */
+margin:150px auto;
 padding:35px;
 border-radius:15px;
-background: rgba(0,0,0,0.2); /* lebih transparan */
+background: rgba(0,0,0,0.2);
 backdrop-filter:blur(10px);
 display:flex;
 flex-direction:column;
@@ -34,23 +32,20 @@ align-items:center;
 box-shadow:0 10px 30px rgba(0,0,0,0.5);
 }
 
-/* ===== JUDUL ===== */
 h1{
 margin-bottom:10px;
 letter-spacing:2px;
 }
 
-/* ===== AYAT ===== */
 .verse{
 margin-bottom:20px;
 font-size:15px;
 opacity:0.9;
 }
 
-/* ===== TEXTAREA (KOTAK PUTIH) ===== */
 textarea{
-width:60%;         /* lebih kecil dari 100% */
-height:150px;       /* lebih compact */
+width:60%;
+height:150px;
 margin-top:30px;
 font-size:16px;
 padding:10px;
@@ -58,10 +53,9 @@ border-radius:8px;
 border:none;
 resize:none;
 color:#111;
-background:rgba(255,255,255,0.3); /* semi-putih tapi jelas */
+background:rgba(255,255,255,0.3);
 }
 
-/* ===== BUTTON ===== */
 button{
 padding:10px 25px;
 margin-top:15px;
@@ -70,12 +64,16 @@ border:none;
 border-radius:8px;
 background:#3b82f6;
 color:white;
+margin:3px;
 }
 
 button:hover{
 background:#2563eb;
 }
 
+.bg-buttons{
+margin-top:20px;
+}
 </style>
 </head>
 
@@ -93,16 +91,32 @@ dan mengarahkan diri kepada apa yang di hadapanku.
 </div>
 
 <input type="file" id="imageInput">
-
 <br>
-
 <button onclick="copyText()">Copy Text</button>
 
 <textarea id="result" placeholder="Hasil teks muncul di sini..."></textarea>
 
+<div class="bg-buttons">
+<h3>Ganti Background</h3>
+<button onclick="setBG('default')">Default</button>
+<button onclick="setBG('galaxy')">Galaxy</button>
+<button onclick="setBG('forest')">Forest</button>
+<button onclick="setBG('sunset')">Sunset</button>
+</div>
+
 </div>
 
 <script>
+
+/* ===== BACKGROUND PRESET ===== */
+function setBG(name){
+  let url = "";
+  if(name==='default') url="https://i.pinimg.com/736x/95/e3/3d/95e33d801f1220d9004716602c1eabfe.jpg";
+  if(name==='galaxy') url="https://images.unsplash.com/photo-1538378917042-10a22c95931a";
+  if(name==='forest') url="https://images.unsplash.com/photo-1503264116251-35a269479413";
+  if(name==='sunset') url="https://images.unsplash.com/photo-1507525428034-b723cf961d3e";
+  document.body.style.backgroundImage="url('"+url+"')";
+}
 
 /* ===== OCR FUNCTION ===== */
 function runOCR(image){
@@ -110,38 +124,36 @@ Tesseract.recognize(
 image,
 'eng'
 ).then(({ data: { text } }) => {
-
-/* hapus enter & spasi, jadi satu baris */
-let cleaned = text.replace(/\n+/g,"").replace(/\s+/g,"").trim()
-
-document.getElementById("result").value = cleaned
+let cleaned = text.replace(/\n+/g,"").replace(/\s+/g,"").trim();
+document.getElementById("result").value = cleaned;
 })
 }
 
 /* ===== UPLOAD GAMBAR ===== */
 document.getElementById('imageInput').addEventListener('change',function(){
-const file = this.files[0]
-runOCR(file)
+const file = this.files[0];
+runOCR(file);
 })
 
 /* ===== PASTE SCREENSHOT ===== */
 document.addEventListener('paste',function(event){
-const items = event.clipboardData.items
+const items = event.clipboardData.items;
 for (let i = 0; i < items.length; i++) {
 if (items[i].type.indexOf("image") !== -1) {
-const blob = items[i].getAsFile()
-runOCR(blob)
+const blob = items[i].getAsFile();
+runOCR(blob);
 }
 }
 })
 
 /* ===== COPY TEXT ===== */
 function copyText(){
-const textarea = document.getElementById("result")
-textarea.select()
-document.execCommand("copy")
+const textarea = document.getElementById("result");
+textarea.select();
+document.execCommand("copy");
 }
 
 </script>
+
 </body>
 </html>
