@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>KITA KITA SAJA</title>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
+
+<style>
+body{
+  font-family:Arial;
+  background-image:url("https://i.pinimg.com/736x/6b/21/12/6b211209c4901314be43910c3db946d2.jpg");
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+  color:white;
+  text-align:center;
+  padding:40px;
+  margin:0;
+}
+
+/* ===== PANEL UTAMA GLASS ===== */
+.container{
+  max-width:750px;
+  margin:400px auto 0 auto; /* turunkan seluruh panel ke bawah */
+  padding:35px;
+  border-radius:15px;
+  background: rgba(0,0,0,0.25); /* semi-transparent glass */
+  backdrop-filter:blur(10px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+
+h1{
+  margin-bottom:10px;
+  letter-spacing:2px;
+}
+
+.verse{
+  margin-bottom:20px;
+  font-size:15px;
+  opacity:0.9;
+}
+
+/* ===== TEXTAREA (KOTAK PUTIH) ===== */
+textarea{
+  width:60%;
+  height:150px;
+  margin-top:20px;
+  font-size:16px;
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  resize:none;
+  color:#111;
+  background:rgba(255,255,255,0.3);
+}
+
+button{
+  padding:10px 25px;
+  margin-top:15px;
+  cursor:pointer;
+  border:none;
+  border-radius:8px;
+  background:#3b82f6;
+  color:white;
+  margin:3px;
+}
+
+button:hover{
+  background:#2563eb;
+}
+
+.bg-buttons{
+  margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>KITA KITA SAJA</h1>
+
+<div class="verse">
+Jangan takut, sebab Aku menyertai engkau, jangan bimbang, sebab Aku ini Allahmu; Aku akan meneguhkan, bahkan akan menolong engkau.  
+<b>Yesaya 41:10</b>
+</div>
+
+<input type="file" id="imageInput">
+<br>
+<button onclick="copyText()">Copy Text</button>
+
+<textarea id="result" placeholder="Hasil teks muncul di sini..."></textarea>
+
+<div class="bg-buttons">
+<h3>Pilih Background</h3>
+<button onclick="setBG(0)">Nop🤍</button>
+<button onclick="setBG(1)">Ymy❀</button>
+<button onclick="setBG(2)">Vaa</button>
+<button onclick="setBG(3)">Met</button>
+<button onclick="setBG(4)">Bebss</button>
+</div>
+
+</div>
+
+<script>
+/* ===== LINK BACKGROUND CUSTOM ===== */
+const bgLinks = [
+ "https://i.pinimg.com/736x/6b/21/12/6b211209c4901314be43910c3db946d2.jpg", // Nop🤍
+  "https://i.pinimg.com/736x/cf/7d/a7/cf7da71ccbf727c78542876cadc13a4e.jpg", // Ymy❀
+  "https://i.pinimg.com/736x/0e/67/14/0e671433e544d7629754fc5cf5459eea.jpg", // Vaa
+  "https://i.pinimg.com/736x/b4/87/25/b487250656bbbaabc883fbb57244ca7d.jpg", // Met
+  "https://i.pinimg.com/736x/8e/5c/65/8e5c655273b8d01034d3424654599b6a.jpg" // Bebss 
+];
+
+/* ===== SET BACKGROUND DENGAN TOMBOL ===== */
+function setBG(index){
+  if(index>=0 && index<bgLinks.length){
+    document.body.style.backgroundImage = "url('"+bgLinks[index]+"')";
+  }
+}
+
+/* ===== OCR FUNCTION ===== */
+function runOCR(image){
+  Tesseract.recognize(
+    image,
+    'eng'
+  ).then(({ data: { text } }) => {
+    let cleaned = text.replace(/\n+/g,"").replace(/\s+/g,"").trim();
+    document.getElementById("result").value = cleaned;
+  })
+}
+
+/* ===== UPLOAD GAMBAR ===== */
+document.getElementById('imageInput').addEventListener('change',function(){
+  const file = this.files[0];
+  runOCR(file);
+})
+
+/* ===== PASTE SCREENSHOT ===== */
+document.addEventListener('paste',function(event){
+  const items = event.clipboardData.items;
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].type.indexOf("image") !== -1) {
+      const blob = items[i].getAsFile();
+      runOCR(blob);
+    }
+  }
+})
+
+/* ===== COPY TEXT ===== */
+function copyText(){
+  const textarea = document.getElementById("result");
+  textarea.select();
+  document.execCommand("copy");
+}
+</script>
+
+</body>
+</html>
